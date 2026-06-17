@@ -9,6 +9,8 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +33,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pengtaotommy-gif/xiahui-dashboard.git
           git add .
           git diff --staged --quiet || git commit -m "Daily update: $(date '+%Y-%m-%d %H:%M')"
           git push
