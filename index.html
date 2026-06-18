@@ -303,7 +303,7 @@ function renderTierTable() {
     html += '<tr' + rowBg + '><td style="color:#fff;font-weight:600">' + m + '</td>';
     for (var t = 0; t < tiers.length; t++) {
       if (td && td[tiers[t]]) {
-        html += '<td class="num" onclick="showUserDetail('' + m + '', '' + tiers[t] + '')">' + td[tiers[t]].user_count + '</td>';
+        html += '<td class="num" data-month="' + m + '" data-tier="' + tiers[t] + '" onclick="showUserDetail(this.dataset.month, this.dataset.tier)">' + td[tiers[t]].user_count + '</td>';
       } else {
         html += '<td style="color:#444">-</td>';
       }
