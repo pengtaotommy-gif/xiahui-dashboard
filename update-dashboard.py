@@ -51,7 +51,6 @@ with open(DATA_FILE, 'wb') as f:
     f.write(target_att)
 print(f"Downloaded: {DATA_FILE}")
 
-# Download ECharts locally (for offline use)
 try:
     if not os.path.exists("echarts.min.js"):
         print("Downloading echarts.min.js...")
@@ -109,71 +108,78 @@ for _, row in daily.tail(30).iterrows():
 with open("dashboard_daily.json", "w", encoding="utf-8") as f:
     json.dump(daily_list, f, ensure_ascii=False, indent=2)
 
-dates = [d['date'][5:] for d in daily_list]
-pubs = [d['publishers'] for d in daily_list]
-pubs2 = [d['publish'] for d in daily_list]
-matches = [d['match'] for d in daily_list]
-resp = [d['response_rate'] for d in daily_list]
+dates = json.dumps([d['date'][5:] for d in daily_list])
+pubs = json.dumps([d['publishers'] for d in daily_list])
+pubs2 = json.dumps([d['publish'] for d in daily_list])
+matches = json.dumps([d['match'] for d in daily_list])
+resp = json.dumps([d['response_rate'] for d in daily_list])
+daily_js = json.dumps(daily_list)
 
-html = f"""<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8">
+CSS = """
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;font-size:14px}
+h1{color:#fff;margin-bottom:20px}
+.kpi{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.card{background:#1a1a2e;border-radius:10px;padding:16px;flex:1;min-width:140px}
+.card .label{color:#888;font-size:12px;margin-bottom:4px}
+.card .value{font-size:24px;font-weight:700;color:#4fc3f7}
+.card .sub{color:#666;font-size:11px}
+.chart{background:#1a1a2e;border-radius:10px;padding:16px;height:360px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 6px;color:#888;border-bottom:1px solid #2a2a3a}
+td{padding:8px 6px;border-bottom:1px solid #1e1e2e}
+tr:hover{background:#1e1e2e}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.V5{background:#ffd700;color:#000}.V4{background:#c0c0c0;color:#000}
+.V3{background:#cd7f32;color:#fff}.V2{background:#4a4a6a;color:#ccc}
+.V1{background:#2a2a4a;color:#888}
+</style>
+"""
+
+html = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>发布者监控看板</title>
 <script src="./echarts.min.js"></script>
-<style>
-*{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;font-size:14px}}
-h1{{color:#fff;margin-bottom:20px}}
-.kpi{{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}}
-.card{{background:#1a1a2e;border-radius:10px;padding:16px;flex:1;min-width:140px}}
-.card .label{{color:#888;font-size:12px;margin-bottom:4px}}
-.card .value{{font-size:24px;font-weight:700;color:#4fc3f7}}
-.card .sub{{color:#666;font-size:11px}}
-.chart{{background:#1a1a2e;border-radius:10px;padding:16px;height:360px;margin-bottom:20px}}
-table{{width:100%;border-collapse:collapse;font-size:12px}}
-th{{text-align:left;padding:8px 6px;color:#888;border-bottom:1px solid #2a2a3a}}
-td{{padding:8px 6px;border-bottom:1px solid #1e1e2e}}
-tr:hover{{background:#1e1e2e}}
-.badge{{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}}
-.V5{{background:#ffd700;color:#000}}.V4{{background:#c0c0c0;color:#000}}
-.V3{{background:#cd7f32;color:#fff}}.V2{{background:#4a4a6a;color:#ccc}}
-.V1{{background:#2a2a4a;color:#888}}
-</style></head><body>
-<h1>📊 发布者监控看板 <span style="font-size:12px;color:#666;font-weight:normal">更新: {latest_date}</span></h1>
+""" + CSS + """
+</head><body>
+<h1>📊 发布者监控看板 <span style="font-size:12px;color:#666;font-weight:normal">更新: """ + latest_date + """</span></h1>
 <div class="kpi">
-  <div class="card"><div class="label">发布人数</div><div class="value">{latest['publishers']}</div></div>
-  <div class="card"><div class="label">发布量</div><div class="value">{latest['publish']}</div></div>
-  <div class="card"><div class="label">报价量</div><div class="value">{latest['quote']}</div></div>
-  <div class="card"><div class="label">匹配量</div><div class="value">{latest['match']}</div></div>
-  <div class="card"><div class="label">响应率</div><div class="value">{rr}%</div></div>
-  <div class="card"><div class="label">匹配率</div><div class="value">{mr}%</div></div>
+  <div class="card"><div class="label">发布人数</div><div class="value">""" + str(latest['publishers']) + """</div></div>
+  <div class="card"><div class="label">发布量</div><div class="value">""" + str(latest['publish']) + """</div></div>
+  <div class="card"><div class="label">报价量</div><div class="value">""" + str(latest['quote']) + """</div></div>
+  <div class="card"><div class="label">匹配量</div><div class="value">""" + str(latest['match']) + """</div></div>
+  <div class="card"><div class="label">响应率</div><div class="value">""" + str(rr) + """%</div></div>
+  <div class="card"><div class="label">匹配率</div><div class="value">""" + str(mr) + """%</div></div>
 </div>
 <div class="chart" id="chart"></div>
 <div id="table-wrap"></div>
 <script>
-var DAILY={daily_list};
-var chart=echarts.init(document.getElementById('chart'));
-chart.setOption({{
+var DAILY = """ + daily_js + """;
+var chart = echarts.init(document.getElementById('chart'));
+chart.setOption({
   backgroundColor:'transparent',
-  tooltip:{{trigger:'axis',backgroundColor:'#1a1a2e',textStyle:{{color:'#ccc'}}}},
-  legend:{{data:['发布人数','发布量','匹配量','响应率'],top:0}},
-  xAxis={{type:'category',data:{dates},axisLine:{{lineStyle:{{color:'#2a2a3a'}}}}}},
-  yAxis=[
-    {{type:'value',name:'人数/量',axisLine:{{lineStyle:{{color:'#2a2a3a'}}}}}},
-    {{type:'value',name:'%',axisLine:{{lineStyle:{{color:'#2a2a3a'}}}}}}
+  tooltip:{trigger:'axis',backgroundColor:'#1a1a2e',textStyle:{color:'#ccc'}},
+  legend:{data:['发布人数','发布量','匹配量','响应率'],top:0},
+  xAxis:{type:'category',data:""" + dates + """,axisLine:{lineStyle:{color:'#2a2a3a'}}}},
+  yAxis:[
+    {type:'value',name:'人数/量',axisLine:{lineStyle:{color:'#2a2a3a'}}},
+    {type:'value',name:'%',axisLine:{lineStyle:{color:'#2a2a3a'}}}
   ],
   series:[
-    {{name:'发布人数',type:'line',data:{pubs},smooth:true,itemStyle:{{color:'#4fc3f7'}}}},
-    {{name:'发布量',type:'line',data:{pubs2},smooth:true,itemStyle:{{color:'#66bb6a'}}}},
-    {{name:'匹配量',type:'line',data:{matches},smooth:true,itemStyle:{{color:'#ff9800'}}}},
-    {{name:'响应率',type:'line',yAxisIndex:1,data:{resp},smooth:true,itemStyle:{{color:'#ef5350'}}}}
+    {name:'发布人数',type:'line',data:""" + pubs + """,smooth:true,itemStyle:{color:'#4fc3f7'}},
+    {name:'发布量',type:'line',data:""" + pubs2 + """,smooth:true,itemStyle:{color:'#66bb6a'}},
+    {name:'匹配量',type:'line',data:""" + matches + """,smooth:true,itemStyle:{color:'#ff9800'}},
+    {name:'响应率',type:'line',yAxisIndex:1,data:""" + resp + """,smooth:true,itemStyle:{color:'#ef5350'}}
   ]
-}});
+});
 var html='<table><thead><tr><th>日期</th><th>发布人数</th><th>发布量</th><th>报价量</th><th>匹配量</th><th>响应率</th><th>匹配率</th></tr></thead><tbody>';
-DAILY.slice(-14).reverse().forEach(function(d){{
+DAILY.slice(-14).reverse().forEach(function(d){
   var r=d.quote,p=d.publish,m=d.match;
   html+='<tr><td>'+d.date+'</td><td>'+d.publishers+'</td><td>'+p+'</td><td>'+r+'</td><td>'+m+'</td><td>'+(p>0?(r/p*100).toFixed(1):'0')+'%</td><td>'+(r>0?(m/r*100).toFixed(1):'0')+'%</td></tr>';
-}});
+});
 html+='</tbody></table>';
 document.getElementById('table-wrap').innerHTML=html;
 </script></body></html>"""
