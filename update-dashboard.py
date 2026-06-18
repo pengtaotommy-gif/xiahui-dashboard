@@ -1,4 +1,4 @@
-import imaplib, email, socket, os, json
+import imaplib, email, socket, os, json, urllib.request
 import pandas as pd
 from email.header import decode_header
 
@@ -16,7 +16,7 @@ def ds(s):
     return ''.join(out)
 
 print("Connecting to mailbox...")
-socket.setdefaulttimeout(30)
+socket.setdefaulttimeout(20)
 mail = imaplib.IMAP4_SSL("imap.sina.com", 993)
 mail.login(os.environ.get("PENGUIN_EMAIL"), os.environ.get("PENGUIN_PASSWORD"))
 mail.select("INBOX")
@@ -50,6 +50,17 @@ if not target_att:
 with open(DATA_FILE, 'wb') as f:
     f.write(target_att)
 print(f"Downloaded: {DATA_FILE}")
+
+# Download ECharts locally (for offline use)
+try:
+    if not os.path.exists("echarts.min.js"):
+        print("Downloading echarts.min.js...")
+        urllib.request.urlretrieve(
+            "https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js",
+            "echarts.min.js")
+        print("echarts.min.js downloaded")
+except Exception as e:
+    print(f"Warning: echarts download failed: {e}")
 
 df = pd.read_excel(DATA_FILE)
 df.columns = ['date','uid','nickname','member_tier','mobile','publish','quote','match']
@@ -108,7 +119,7 @@ html = f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>发布者监控看板</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="./echarts.min.js"></script>
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
 body{{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;font-size:14px}}
