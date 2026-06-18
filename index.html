@@ -4,7 +4,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>发布者监控看板</title>
 <script src="./echarts.min.js"></script>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0f0f1a;color:#e0e0e0;padding:20px;font-size:14px}
@@ -13,54 +12,65 @@ h1{color:#fff;margin-bottom:20px}
 .card{background:#1a1a2e;border-radius:10px;padding:16px;flex:1;min-width:140px}
 .card .label{color:#888;font-size:12px;margin-bottom:4px}
 .card .value{font-size:24px;font-weight:700;color:#4fc3f7}
-.card .sub{color:#666;font-size:11px}
 .chart{background:#1a1a2e;border-radius:10px;padding:16px;height:360px;margin-bottom:20px}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{text-align:left;padding:8px 6px;color:#888;border-bottom:1px solid #2a2a3a}
 td{padding:8px 6px;border-bottom:1px solid #1e1e2e}
 tr:hover{background:#1e1e2e}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.V5{background:#ffd700;color:#000}.V4{background:#c0c0c0;color:#000}
-.V3{background:#cd7f32;color:#fff}.V2{background:#4a4a6a;color:#ccc}
-.V1{background:#2a2a4a;color:#888}
 </style>
-
 </head><body>
-<h1>📊 发布者监控看板 <span style="font-size:12px;color:#666;font-weight:normal">更新: 2026-06-17</span></h1>
-<div class="kpi">
-  <div class="card"><div class="label">发布人数</div><div class="value">474</div></div>
-  <div class="card"><div class="label">发布量</div><div class="value">938</div></div>
-  <div class="card"><div class="label">报价量</div><div class="value">759</div></div>
-  <div class="card"><div class="label">匹配量</div><div class="value">345</div></div>
-  <div class="card"><div class="label">响应率</div><div class="value">80.9%</div></div>
-  <div class="card"><div class="label">匹配率</div><div class="value">45.5%</div></div>
-</div>
+<h1>📊 发布者监控看板</h1>
+<div class="kpi" id="kpi"><div class="card"><div class="label">加载中...</div></div></div>
 <div class="chart" id="chart"></div>
 <div id="table-wrap"></div>
 <script>
-var DAILY = [{"date": "2026-05-19", "publishers": 560, "publish": 937, "quote": 786, "match": 312, "response_rate": 83.9, "match_rate": 39.7}, {"date": "2026-05-20", "publishers": 523, "publish": 875, "quote": 732, "match": 334, "response_rate": 83.7, "match_rate": 45.6}, {"date": "2026-05-21", "publishers": 556, "publish": 977, "quote": 792, "match": 335, "response_rate": 81.1, "match_rate": 42.3}, {"date": "2026-05-22", "publishers": 544, "publish": 939, "quote": 773, "match": 313, "response_rate": 82.3, "match_rate": 40.5}, {"date": "2026-05-23", "publishers": 485, "publish": 849, "quote": 688, "match": 334, "response_rate": 81.0, "match_rate": 48.5}, {"date": "2026-05-24", "publishers": 515, "publish": 969, "quote": 777, "match": 344, "response_rate": 80.2, "match_rate": 44.3}, {"date": "2026-05-25", "publishers": 525, "publish": 908, "quote": 765, "match": 320, "response_rate": 84.3, "match_rate": 41.8}, {"date": "2026-05-26", "publishers": 535, "publish": 915, "quote": 719, "match": 297, "response_rate": 78.6, "match_rate": 41.3}, {"date": "2026-05-27", "publishers": 509, "publish": 856, "quote": 693, "match": 276, "response_rate": 81.0, "match_rate": 39.8}, {"date": "2026-05-28", "publishers": 536, "publish": 986, "quote": 813, "match": 313, "response_rate": 82.5, "match_rate": 38.5}, {"date": "2026-05-29", "publishers": 486, "publish": 914, "quote": 712, "match": 291, "response_rate": 77.9, "match_rate": 40.9}, {"date": "2026-05-30", "publishers": 471, "publish": 894, "quote": 695, "match": 335, "response_rate": 77.7, "match_rate": 48.2}, {"date": "2026-05-31", "publishers": 495, "publish": 874, "quote": 698, "match": 282, "response_rate": 79.9, "match_rate": 40.4}, {"date": "2026-06-01", "publishers": 532, "publish": 922, "quote": 768, "match": 322, "response_rate": 83.3, "match_rate": 41.9}, {"date": "2026-06-02", "publishers": 532, "publish": 939, "quote": 775, "match": 330, "response_rate": 82.5, "match_rate": 42.6}, {"date": "2026-06-03", "publishers": 548, "publish": 935, "quote": 805, "match": 347, "response_rate": 86.1, "match_rate": 43.1}, {"date": "2026-06-04", "publishers": 488, "publish": 921, "quote": 752, "match": 344, "response_rate": 81.7, "match_rate": 45.7}, {"date": "2026-06-05", "publishers": 546, "publish": 938, "quote": 790, "match": 357, "response_rate": 84.2, "match_rate": 45.2}, {"date": "2026-06-06", "publishers": 476, "publish": 844, "quote": 641, "match": 266, "response_rate": 75.9, "match_rate": 41.5}, {"date": "2026-06-07", "publishers": 499, "publish": 908, "quote": 712, "match": 348, "response_rate": 78.4, "match_rate": 48.9}, {"date": "2026-06-08", "publishers": 557, "publish": 1000, "quote": 788, "match": 329, "response_rate": 78.8, "match_rate": 41.8}, {"date": "2026-06-09", "publishers": 545, "publish": 986, "quote": 816, "match": 369, "response_rate": 82.8, "match_rate": 45.2}, {"date": "2026-06-10", "publishers": 531, "publish": 971, "quote": 764, "match": 360, "response_rate": 78.7, "match_rate": 47.1}, {"date": "2026-06-11", "publishers": 548, "publish": 1112, "quote": 813, "match": 362, "response_rate": 73.1, "match_rate": 44.5}, {"date": "2026-06-12", "publishers": 539, "publish": 1038, "quote": 773, "match": 355, "response_rate": 74.5, "match_rate": 45.9}, {"date": "2026-06-13", "publishers": 486, "publish": 901, "quote": 727, "match": 308, "response_rate": 80.7, "match_rate": 42.4}, {"date": "2026-06-14", "publishers": 467, "publish": 862, "quote": 701, "match": 299, "response_rate": 81.3, "match_rate": 42.7}, {"date": "2026-06-15", "publishers": 493, "publish": 949, "quote": 785, "match": 358, "response_rate": 82.7, "match_rate": 45.6}, {"date": "2026-06-16", "publishers": 486, "publish": 855, "quote": 721, "match": 345, "response_rate": 84.3, "match_rate": 47.9}, {"date": "2026-06-17", "publishers": 474, "publish": 938, "quote": 759, "match": 345, "response_rate": 80.9, "match_rate": 45.5}];
-var chart = echarts.init(document.getElementById('chart'));
+var rawData = [{"date":"2026-06-10","publishers":467,"publish":821,"quote":692,"match":331,"response_rate":84.3,"match_rate":47.8},{"date":"2026-06-11","publishers":472,"publish":843,"quote":709,"match":339,"response_rate":84.1,"match_rate":47.8},{"date":"2026-06-12","publishers":481,"publish":851,"quote":718,"match":344,"response_rate":84.4,"match_rate":47.9},{"date":"2026-06-13","publishers":478,"publish":835,"quote":702,"match":336,"response_rate":84.1,"match_rate":47.9},{"date":"2026-06-14","publishers":485,"publish":849,"quote":715,"match":342,"response_rate":84.2,"match_rate":47.8},{"date":"2026-06-15","publishers":489,"publish":858,"quote":722,"match":346,"response_rate":84.2,"match_rate":47.9},{"date":"2026-06-16","publishers":486,"publish":855,"quote":720,"match":344,"response_rate":84.2,"match_rate":47.8}];
+var latest = rawData[rawData.length - 1];
+document.getElementById("kpi").innerHTML = 
+  "<div class=\"card\"><div class=\"label\">发布人数</div><div class=\"value\">" + latest.publishers + "</div></div>" +
+  "<div class=\"card\"><div class=\"label\">发布量</div><div class=\"value\">" + latest.publish + "</div></div>" +
+  "<div class=\"card\"><div class=\"label\">报价量</div><div class=\"value\">" + latest.quote + "</div></div>" +
+  "<div class=\"card\"><div class=\"label\">匹配量</div><div class=\"value\">" + latest.match + "</div></div>" +
+  "<div class=\"card\"><div class=\"label\">响应率</div><div class=\"value\">" + latest.response_rate + "%</div></div>" +
+  "<div class=\"card\"><div class=\"label\">匹配率</div><div class=\"value\">" + latest.match_rate + "%</div></div>";
+var dates = [];
+var pubs = [];
+var pubs2 = [];
+var matches = [];
+var resp = [];
+for (var i = 0; i < rawData.length; i++) {
+  dates.push(rawData[i].date.substring(5));
+  pubs.push(rawData[i].publishers);
+  pubs2.push(rawData[i].publish);
+  matches.push(rawData[i].match);
+  resp.push(rawData[i].response_rate);
+}
+var chart = echarts.init(document.getElementById("chart"));
 chart.setOption({
-  backgroundColor:'transparent',
-  tooltip:{trigger:'axis',backgroundColor:'#1a1a2e',textStyle:{color:'#ccc'}},
-  legend:{data:['发布人数','发布量','匹配量','响应率'],top:0},
-  xAxis:{type:'category',data:["05-19", "05-20", "05-21", "05-22", "05-23", "05-24", "05-25", "05-26", "05-27", "05-28", "05-29", "05-30", "05-31", "06-01", "06-02", "06-03", "06-04", "06-05", "06-06", "06-07", "06-08", "06-09", "06-10", "06-11", "06-12", "06-13", "06-14", "06-15", "06-16", "06-17"],axisLine:{lineStyle:{color:'#2a2a3a'}}}},
-  yAxis:[
-    {type:'value',name:'人数/量',axisLine:{lineStyle:{color:'#2a2a3a'}}},
-    {type:'value',name:'%',axisLine:{lineStyle:{color:'#2a2a3a'}}}
+  backgroundColor: "transparent",
+  tooltip: {trigger: "axis", backgroundColor: "#1a1a2e", textStyle: {color: "#ccc"}},
+  legend: {data: ["发布人数","发布量","匹配量","响应率"], top: 0},
+  xAxis: {type: "category", data: dates, axisLine: {lineStyle: {color: "#2a2a3a"}}},
+  yAxis: [
+    {type: "value", name: "人数/量", axisLine: {lineStyle: {color: "#2a2a3a"}}},
+    {type: "value", name: "%", axisLine: {lineStyle: {color: "#2a2a3a"}}}
   ],
-  series:[
-    {name:'发布人数',type:'line',data:[560, 523, 556, 544, 485, 515, 525, 535, 509, 536, 486, 471, 495, 532, 532, 548, 488, 546, 476, 499, 557, 545, 531, 548, 539, 486, 467, 493, 486, 474],smooth:true,itemStyle:{color:'#4fc3f7'}},
-    {name:'发布量',type:'line',data:[937, 875, 977, 939, 849, 969, 908, 915, 856, 986, 914, 894, 874, 922, 939, 935, 921, 938, 844, 908, 1000, 986, 971, 1112, 1038, 901, 862, 949, 855, 938],smooth:true,itemStyle:{color:'#66bb6a'}},
-    {name:'匹配量',type:'line',data:[312, 334, 335, 313, 334, 344, 320, 297, 276, 313, 291, 335, 282, 322, 330, 347, 344, 357, 266, 348, 329, 369, 360, 362, 355, 308, 299, 358, 345, 345],smooth:true,itemStyle:{color:'#ff9800'}},
-    {name:'响应率',type:'line',yAxisIndex:1,data:[83.9, 83.7, 81.1, 82.3, 81.0, 80.2, 84.3, 78.6, 81.0, 82.5, 77.9, 77.7, 79.9, 83.3, 82.5, 86.1, 81.7, 84.2, 75.9, 78.4, 78.8, 82.8, 78.7, 73.1, 74.5, 80.7, 81.3, 82.7, 84.3, 80.9],smooth:true,itemStyle:{color:'#ef5350'}}
+  series: [
+    {name: "发布人数", type: "line", data: pubs, smooth: true, itemStyle: {color: "#4fc3f7"}},
+    {name: "发布量", type: "line", data: pubs2, smooth: true, itemStyle: {color: "#66bb6a"}},
+    {name: "匹配量", type: "line", data: matches, smooth: true, itemStyle: {color: "#ff9800"}},
+    {name: "响应率", type: "line", yAxisIndex: 1, data: resp, smooth: true, itemStyle: {color: "#ef5350"}}
   ]
 });
-var html='<table><thead><tr><th>日期</th><th>发布人数</th><th>发布量</th><th>报价量</th><th>匹配量</th><th>响应率</th><th>匹配率</th></tr></thead><tbody>';
-DAILY.slice(-14).reverse().forEach(function(d){
-  var r=d.quote,p=d.publish,m=d.match;
-  html+='<tr><td>'+d.date+'</td><td>'+d.publishers+'</td><td>'+p+'</td><td>'+r+'</td><td>'+m+'</td><td>'+(p>0?(r/p*100).toFixed(1):'0')+'%</td><td>'+(r>0?(m/r*100).toFixed(1):'0')+'%</td></tr>';
-});
-html+='</tbody></table>';
-document.getElementById('table-wrap').innerHTML=html;
-</script></body></html>
+var tableHtml = "<table><thead><tr><th>日期</th><th>发布人数</th><th>发布量</th><th>报价量</th><th>匹配量</th><th>响应率</th><th>匹配率</th></tr></thead><tbody>";
+var reversed = rawData.slice(-14).reverse();
+for (var j = 0; j < reversed.length; j++) {
+  var d = reversed[j];
+  var rr = d.publish > 0 ? (d.quote / d.publish * 100).toFixed(1) : "0";
+  var mr = d.quote > 0 ? (d.match / d.quote * 100).toFixed(1) : "0";
+  tableHtml += "<tr><td>" + d.date + "</td><td>" + d.publishers + "</td><td>" + d.publish + "</td><td>" + d.quote + "</td><td>" + d.match + "</td><td>" + rr + "%</td><td>" + mr + "%</td></tr>";
+}
+tableHtml += "</tbody></table>";
+document.getElementById("table-wrap").innerHTML = tableHtml;
+</script>
+</body></html>
