@@ -1,14 +1,5 @@
 [
   {
-    "date": "2026-05-18",
-    "publishers": 517,
-    "publish": 834,
-    "quote": 703,
-    "match": 297,
-    "response_rate": 84.3,
-    "match_rate": 42.2
-  },
-  {
     "date": "2026-05-19",
     "publishers": 560,
     "publish": 937,
@@ -264,9 +255,18 @@
     "date": "2026-06-16",
     "publishers": 486,
     "publish": 855,
-    "quote": 720,
-    "match": 344,
-    "response_rate": 84.2,
-    "match_rate": 47.8
+    "quote": 721,
+    "match": 345,
+    "response_rate": 84.3,
+    "match_rate": 47.9
+  },
+  {
+    "date": "2026-06-17",
+    "publishers": 474,
+    "publish": 938,
+    "quote": 759,
+    "match": 345,
+    "response_rate": 80.9,
+    "match_rate": 45.5
   }
 ]

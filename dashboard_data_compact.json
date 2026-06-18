@@ -1,11 +1,11 @@
 {
-  "latest_date": "2026-06-16",
+  "latest_date": "2026-06-17",
   "latest": {
-    "publishers": 486,
-    "publish": 855,
-    "quote": 720,
-    "match": 344,
-    "response_rate": 84.2,
-    "match_rate": 47.8
+    "publishers": 474,
+    "publish": 938,
+    "quote": 759,
+    "match": 345,
+    "response_rate": 80.9,
+    "match_rate": 45.5
   }
 }
