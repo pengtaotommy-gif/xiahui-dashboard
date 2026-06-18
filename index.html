@@ -303,7 +303,7 @@ function renderTierTable() {
     html += '<tr' + rowBg + '><td style="color:#fff;font-weight:600">' + m + '</td>';
     for (var t = 0; t < tiers.length; t++) {
       if (td && td[tiers[t]]) {
-        html += '<td class="num" data-month="' + m + '" data-tier="' + tiers[t] + '" onclick="showUserDetail(this.dataset.month, this.dataset.tier)">' + td[tiers[t]].user_count + '</td>';
+html += '<td class="num" data-m="' + m + '" data-t="' + tiers[t] + '" onclick="showUserDetail(this.dataset.m, this.dataset.t)">' + td[tiers[t]].user_count + '</td>';
       } else {
         html += '<td style="color:#444">-</td>';
       }
@@ -497,7 +497,7 @@ function renderTierDailyTable(dates) {
       html += '<tr>' +
         '<td style="color:#fff;font-weight:600">' + dt + '</td>' +
         '<td class="tier-cell"><span class="tier-badge tier-' + tier + '">' + tier + '</span></td>' +
-        '<td class="num" onclick="showTierDayUserDetail('' + day.date + '', '' + tier + '')">' + td.publishers + '</td>' +
+    '<td class="num" data-d="' + day.date + '" data-t="' + tier + '" onclick="showTierDayUserDetail(this.dataset.d, this.dataset.t)">' + td.publishers + '</td>' +
         '<td class="chg-cell">' + chgCell(td.publishers_chg_day) + '</td>' +
         '<td class="chg-cell">' + chgCell(td.publishers_chg_week) + '</td>' +
         '<td>' + td.publish + '</td>' +
